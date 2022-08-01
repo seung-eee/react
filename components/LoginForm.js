@@ -9,7 +9,12 @@ const ButtonWrapper = styled.div`
   margin-top: 10px;
 `;
 
-const LoginForm = () => {
+const FormWrapper = styled(Form)`
+  padding: 10px;
+`;
+
+//setIsLoggedIn = AppLayout.js에 적었던 더미 데이터를 LoginForm으로 넘겨준 것
+const LoginForm = ({ setIsLoggedIn }) => {
   //나중에는 react-form 같은 라이브러리를 사용하는 것 추천
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
@@ -23,11 +28,17 @@ const LoginForm = () => {
     setPassword(e.target.value);
   }, []);
 
-  //
   const sytle = useMemo(() => ({ marginTop: 10 }), []);
 
+  //antd의 onFinish에는 e.preventDefault();가 이미 적용되어 있어서 쓰지 않아도 됨
+  const onSubmitForm = useCallback(() => {
+    console.log(id, password);
+    //로그인을 하는 순간 IsLoggedIn이 true로 바뀜 => AppLayout.js에 있는 <LoginForm>이 <UserProfile>로 바뀜
+    setIsLoggedIn(true);
+  }, [id, password])
+
   return (
-    <Form>
+    <FormWrapper onFinish={onSubmitForm}>
       <div>
         <label htmlFor='user-id'>아이디</label>
         <br />
@@ -42,7 +53,7 @@ const LoginForm = () => {
         <Button type='primary' htmlType='submit' loading={false}>로그인</Button>
         <Link href="/signup"><a><Button>회원가입</Button></a></Link>
       </div>
-    </Form>
+    </FormWrapper>
   );
 }
 
