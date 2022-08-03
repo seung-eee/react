@@ -3,6 +3,8 @@ import { useCallback, useState, useMemo } from 'react';
 import { Form, Input, Button } from 'antd';
 import Link from 'next/link';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import useInput from '../hooks/useInput';
 
 //styled 사용할 수 도 있고, >27번 처럼 useMemo를 사용할 수도 있음
 const ButtonWrapper = styled.div`
@@ -15,17 +17,16 @@ const FormWrapper = styled(Form)`
 
 //setIsLoggedIn = AppLayout.js에 적었던 더미 데이터를 LoginForm으로 넘겨준 것
 const LoginForm = ({ setIsLoggedIn }) => {
+  //일반 버전(id)
   //나중에는 react-form 같은 라이브러리를 사용하는 것 추천
   const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
+
+  // 커스텀훅 버전(password) -> useInput에서 useState와 useCallback을 해주기 때문에 password와 onChangePassword만 넣어주면 됨
+  const [password, onChangePassword] = useInput('');
 
   // 컴포넌트에 props로 넘어오는 함수는 useCallback을 사용하여 최적화를 해줌
   const onChangeId = useCallback((e) => {
     setId(e.target.value);
-  }, []);
-
-  const onChangePassword = useCallback((e) => {
-    setPassword(e.target.value);
   }, []);
 
   const sytle = useMemo(() => ({ marginTop: 10 }), []);
@@ -56,5 +57,9 @@ const LoginForm = ({ setIsLoggedIn }) => {
     </FormWrapper>
   );
 }
+
+LoginForm.propTypes = {
+  setIsLoggedIn: PropTypes.func.isRequired,
+};
 
 export default LoginForm;
