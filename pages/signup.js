@@ -36,7 +36,7 @@ const Signup = () => {
   const onChangeTerm = useCallback((e) => {
     setTerm(e.target.checked);
     setTermError(false);
-  })
+  });
 
   // e.preventdefault가 자동으로 되게 때문에 따로 설정할 필요 없음
   // e.preventdefault = <a>, <submit> 할 때 특정 사이트로 이동하거나, 값을 전송하며 창이 새로고침 되는 것을 막아줌
