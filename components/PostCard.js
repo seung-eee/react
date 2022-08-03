@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import PostImages from './PostImages';
 import { useCallback, useState } from 'react';
 import CommentForm from '../components/CommentForm';
+import PostCardContent from '../components/PostCardContent';
 
 //post는 부모(pages>index.js)로부터 받아오고 있음
 const PostCard = ({ post }) => {
@@ -55,7 +56,7 @@ const PostCard = ({ post }) => {
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
           title={post.User.nickname}
-          description={post.content} />
+          description={<PostCardContent postData={post.content} />} />
         <Image />
       </Card >
       {commentFormOpend && (
