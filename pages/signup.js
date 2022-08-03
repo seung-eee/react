@@ -4,12 +4,15 @@ import Head from "next/head";
 const Signup = () => {
   return (
     <>
-      <Head>
-        <title>회원가입 | NodeBird</title>
-      </Head>
       <AppLayout>
-        회원가입
+        <Head>
+          <title>회원가입 | NodeBird</title>
+        </Head>
+        <AppLayout>
+          회원가입
+        </AppLayout>
       </AppLayout>
+
     </>
   )
 }
