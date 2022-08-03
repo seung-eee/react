@@ -1,15 +1,15 @@
 import { HYDRATE } from 'next-redux-wrapper';
+import user from './user';
+import post from './post';
+import { combineReducers } from 'redux';
 
 // 초기 state
-const initialState = {
+export const initialState = {
   user: {
-    isLoggedIn: false,
-    user: null,
-    signUpDate: {},
-    loginData: {},
+
   },
   post: {
-    mainPosts: [],
+
   }
 }
 
@@ -28,51 +28,25 @@ const changeNickname = (data) => {
   }
 }
 
-export const loginAction = (data) => {
-  return {
-    type: 'LOG_IN',
-    data,
-  }
-}
-
-export const logoutAction = (data) => {
-  return {
-    type: 'LOG_OUT',
-  }
-}
-
 // changeNickname('wow');
 // store.dispath(changeNickname('hse'));
 
 // reducer => 이전상태와 액션을 통해서 다음상태를 만들어내는 함수
-const rootReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case HYDRATE:
-      return {
-        ...state,
-        ...action.payload,
-      }
-    case 'LOG_IN':
-      return {
-        ...state,
-        user: {
-          ...state.user,
-          isLoggedIn: true,
-          user: action.data,
-        },
-      }
-    case 'LOG_OUT':
-      return {
-        ...state,
-        user: {
-          ...state.user,
-          isLoggedIn: false,
-          user: null,
-        },
-      }
-    default:
-      return state;
-  }
-};
+// combineReducers => reducer을 합치는 것
+const rootReducer = combineReducers({
+  index: (state = {}, action) => {
+    switch (action.type) {
+      case HYDRATE:
+        return {
+          ...state,
+          ...action.payload,
+        }
+      default:
+        return state;
+    }
+  },
+  user,
+  post,
+});
 
 export default rootReducer;

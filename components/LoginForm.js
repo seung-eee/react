@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import useInput from '../hooks/useInput';
 import { useDispatch } from 'react-redux';
-import { loginAction } from '../reducers';
+import { loginAction } from '../reducers/user';
 
 //styled 사용할 수 도 있고, >27번 처럼 useMemo를 사용할 수도 있음
 const ButtonWrapper = styled.div`
