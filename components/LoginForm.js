@@ -5,6 +5,8 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import useInput from '../hooks/useInput';
+import { useDispatch } from 'react-redux';
+import { loginAction } from '../reducers';
 
 //styled 사용할 수 도 있고, >27번 처럼 useMemo를 사용할 수도 있음
 const ButtonWrapper = styled.div`
@@ -19,15 +21,18 @@ const FormWrapper = styled(Form)`
 const LoginForm = ({ setIsLoggedIn }) => {
   //일반 버전(id)
   //나중에는 react-form 같은 라이브러리를 사용하는 것 추천
-  const [id, setId] = useState('');
-
-  // 커스텀훅 버전(password) -> useInput에서 useState와 useCallback을 해주기 때문에 password와 onChangePassword만 넣어주면 됨
-  const [password, onChangePassword] = useInput('');
+  // const [id, setId] = useState('');
 
   // 컴포넌트에 props로 넘어오는 함수는 useCallback을 사용하여 최적화를 해줌
-  const onChangeId = useCallback((e) => {
-    setId(e.target.value);
-  }, []);
+  // const onChangeId = useCallback((e) => {
+  //   setId(e.target.value);
+  // }, []);
+
+  // 커스텀훅 버전(password) -> useInput에서 useState와 useCallback을 해주기 때문에 password와 onChangePassword만 넣어주면 됨
+  const [id, onChangeId] = useInput('');
+  const [password, onChangePassword] = useInput('');
+
+  const dispatch = useDispatch();
 
   const sytle = useMemo(() => ({ marginTop: 10 }), []);
 
@@ -35,7 +40,7 @@ const LoginForm = ({ setIsLoggedIn }) => {
   const onSubmitForm = useCallback(() => {
     console.log(id, password);
     //로그인을 하는 순간 IsLoggedIn이 true로 바뀜 => AppLayout.js에 있는 <LoginForm>이 <UserProfile>로 바뀜
-    setIsLoggedIn(true);
+    dispatch(loginAction({ id, password }));
   }, [id, password])
 
   return (
@@ -57,9 +62,5 @@ const LoginForm = ({ setIsLoggedIn }) => {
     </FormWrapper>
   );
 }
-
-LoginForm.propTypes = {
-  setIsLoggedIn: PropTypes.func.isRequired,
-};
 
 export default LoginForm;

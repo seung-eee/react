@@ -8,6 +8,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import UserProfile from '../components/UserProfile';
 import LoginForm from '../components/LoginForm';
+import { useSelector } from 'react-redux';
 
 const SearchInput = styled(Input.Search)`
   vertical-align: middle;
@@ -16,8 +17,7 @@ const SearchInput = styled(Input.Search)`
 //_app.js = 전체에서 공통인 것들을 넣는 곳이고, Layout은 일부에서 공통인 것들을 만드는 것
 const AppLayout = ({ children }) => {
 
-  //setIsLoggedIn을 LoginForm으로 넘겨줌
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
   return (
     <div>
@@ -41,7 +41,7 @@ const AppLayout = ({ children }) => {
         {/* 24칸 중에 6칸 차지함 - 모바일일 때는 세로로 3칸/데스크탑일 때는 가로로 3칸 */}
         <Col xs={24} md={6}>
           {/* isLoggedIn이 true = <UserProfile> / setIsLoggedIn false = <LoginForm> */}
-          {isLoggedIn ? <UserProfile setIsLoggedIn={setIsLoggedIn} /> : <LoginForm setIsLoggedIn={setIsLoggedIn} />}
+          {isLoggedIn ? <UserProfile /> : <LoginForm />}
         </Col>
         <Col xs={24} md={12}>
           {children}

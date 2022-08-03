@@ -1,8 +1,16 @@
+import { HYDRATE } from 'next-redux-wrapper';
+
 // 초기 state
 const initialState = {
-  name: 'Mina',
-  age: 27,
-  password: 'babo',
+  user: {
+    isLoggedIn: false,
+    user: null,
+    signUpDate: {},
+    loginData: {},
+  },
+  post: {
+    mainPosts: [],
+  }
 }
 
 // async action creator(비동기 액션 크리에이터) => redux saga
@@ -20,17 +28,50 @@ const changeNickname = (data) => {
   }
 }
 
+export const loginAction = (data) => {
+  return {
+    type: 'LOG_IN',
+    data,
+  }
+}
+
+export const logoutAction = (data) => {
+  return {
+    type: 'LOG_OUT',
+  }
+}
+
 // changeNickname('wow');
 // store.dispath(changeNickname('hse'));
 
 // reducer => 이전상태와 액션을 통해서 다음상태를 만들어내는 함수
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'CHANGE_NICKNAME':
+    case HYDRATE:
       return {
         ...state,
-        name: action.data,
+        ...action.payload,
       }
+    case 'LOG_IN':
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          isLoggedIn: true,
+          user: action.data,
+        },
+      }
+    case 'LOG_OUT':
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          isLoggedIn: false,
+          user: null,
+        },
+      }
+    default:
+      return state;
   }
 };
 
