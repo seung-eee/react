@@ -9,9 +9,25 @@ import styled from 'styled-components';
 import UserProfile from '../components/UserProfile';
 import LoginForm from '../components/LoginForm';
 import { useSelector } from 'react-redux';
+import { createGlobalStyle } from 'styled-components';
 
 const SearchInput = styled(Input.Search)`
   vertical-align: middle;
+`;
+
+const Global = createGlobalStyle`
+  .ant-row {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+
+  .ant-col:first-child {
+    padding-left: 0 !important;
+  }
+
+  .ant-col:last-child {
+    padding-right: 0 !important;
+  }
 `;
 
 //_app.js = 전체에서 공통인 것들을 넣는 곳이고, Layout은 일부에서 공통인 것들을 만드는 것
@@ -22,6 +38,7 @@ const AppLayout = ({ children }) => {
 
   return (
     <div>
+      <Global />
       <Menu mode="horizontal">
         <Menu.Item>
           <Link href="/"><a>노드버드</a></Link>
