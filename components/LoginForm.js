@@ -5,8 +5,8 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import useInput from '../hooks/useInput';
-import { useDispatch } from 'react-redux';
-import { loginAction } from '../reducers/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginRequestAction } from '../reducers/user';
 
 //styled 사용할 수 도 있고, >27번 처럼 useMemo를 사용할 수도 있음
 const ButtonWrapper = styled.div`
@@ -34,13 +34,15 @@ const LoginForm = ({ setIsLoggedIn }) => {
 
   const dispatch = useDispatch();
 
+  const { isLoggingIn } = useSelector((state) => state.user)
+
   const sytle = useMemo(() => ({ marginTop: 10 }), []);
 
   //antd의 onFinish에는 e.preventDefault();가 이미 적용되어 있어서 쓰지 않아도 됨
   const onSubmitForm = useCallback(() => {
     console.log(id, password);
     //로그인을 하는 순간 IsLoggedIn이 true로 바뀜 => AppLayout.js에 있는 <LoginForm>이 <UserProfile>로 바뀜
-    dispatch(loginAction({ id, password }));
+    dispatch(loginRequestAction({ id, password }));
   }, [id, password])
 
   return (
@@ -56,7 +58,7 @@ const LoginForm = ({ setIsLoggedIn }) => {
         <Input name="user-password" type="password" value={password} onChange={onChangePassword} required></Input>
       </div>
       <div style={sytle}>
-        <Button type='primary' htmlType='submit' loading={false}>로그인</Button>
+        <Button type='primary' htmlType='submit' loading={isLoggingIn}>로그인</Button>
         <Link href="/signup"><a><Button>회원가입</Button></a></Link>
       </div>
     </FormWrapper>
