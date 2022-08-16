@@ -1,3 +1,5 @@
+import shortId from "shortid";
+
 export const initialState = {
   mainPosts: [{
     id: 1,
@@ -26,43 +28,88 @@ export const initialState = {
     }],
   }],
   imagePaths: [],
-  postAdded: false,
+  addPostLoading: false,
+  addPostDone: false,
+  addPostError: false,
 };
 
-const dummyPost = {
-  id: 2,
-  content: '더미데이터입니다.',
+const dummyPost = (data) => ({
+  id: shortId.generate(),
+  content: data,
   User: {
     id: 1,
     nickname: "더미",
   },
   Images: [],
   Comments: [],
-}
+});
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUSET';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
 
+export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUSET';
+export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
+export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
+
 // action
 export const addPost = (data) => ({
   type: ADD_POST_REQUEST,
+  data,
+});
+
+// 동적 액션 크리에이터
+export const addComment = (data) => ({
+  type: ADD_COMMENT_REQUEST,
   data,
 })
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_POST_REQUEST:
-
+      return {
+        ...state,
+        addPostLoading: true,
+        addPostDone: false,
+        addPostError: null,
+      };
     case ADD_POST_SUCCESS:
       return {
         ...state,
         // dummyPost를 앞에 추가해줘야 게시글 가장 위에 올라감
-        mainPosts: [dummyPost, ...state.mainPosts],
-        postAdded: true,
+        mainPosts: [dummyPost(action.data), ...state.mainPosts],
+        addPostLoading: false,
+        addPostDone: true,
       };
     case ADD_POST_FAILURE:
-
+      return {
+        addPostLoading: false,
+        addPostError: action.error,
+      };
+    case ADD_COMMENT_REQUEST:
+      return {
+        ...state,
+        addCommentLoading: true,
+        addCommentDone: false,
+        addCommentError: null,
+      };
+    case ADD_COMMENT_SUCCESS:
+      // action.data.content, postId, userId
+      const postIndex = state.mainPosts.findIndex((v) => v.id === action.data.postId);
+      const post = state.mainPosts[postIndex];
+      const Comments = [dummyComment(action.data.content), ...post.Comments];
+      const mainPosts = [...state.mainPosts];
+      mainPosts[postIndex] = { ...post, Comments };
+      return {
+        ...state,
+        addCommentLoading: false,
+        addCommentDone: true,
+      };
+    case ADD_COMMENT_FAILURE:
+      return {
+        addCommentLoading: false,
+        addCommentError: action.error,
+      };
     default:
       return state;
   }

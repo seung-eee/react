@@ -10,7 +10,7 @@ const LogOutWrapper = styled(Button)`
 
 const UserProfile = () => {
   const dispatch = useDispatch();
-  const { me, isLoggingOut } = useSelector((state) => state.user);
+  const { me, logOutLoading } = useSelector((state) => state.user);
 
   const onLogOut = useCallback(() => {
     dispatch(logoutRequestAction());
@@ -19,15 +19,15 @@ const UserProfile = () => {
   return (
     // react에서 배열을 쓸 때는 key 붙어야함
     <Card actions={[
-      <div key="twit">짹짹<br />0</div>,
-      <div key="follwings">팔로윙<br />0</div>,
-      <div key="follwer">팔로워<br />0</div>,
+      <div key="twit">짹짹<br />{me.Post.legnth}</div>,
+      <div key="follwings">팔로윙<br />{me.Followings.legnth}</div>,
+      <div key="follwer">팔로워<br />{me.Followers.legnth}</div>,
     ]}>
       <Card.Meta
         avatar={<Avatar>{me.nickname[0]}</Avatar>}
         title={me.nickname}
       />
-      <LogOutWrapper onClick={onLogOut} loading={isLoggingOut}>로그아웃</LogOutWrapper>
+      <LogOutWrapper onClick={onLogOut} loading={logOutLoading}>로그아웃</LogOutWrapper>
     </Card>
   );
 }

@@ -33,8 +33,8 @@ const Global = createGlobalStyle`
 //_app.js = 전체에서 공통인 것들을 넣는 곳이고, Layout은 일부에서 공통인 것들을 만드는 것
 const AppLayout = ({ children }) => {
 
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  //const { isLoggedIn } = useSelector((state) => state.user); //이렇게 사용할 수도 있음
+  // const isLoggedIn = useSelector((state) => state.user.isLoggedIn); //이렇게 사용할 수도 있음
+  const { me } = useSelector((state) => state.user);
 
   return (
     <div>
@@ -58,8 +58,8 @@ const AppLayout = ({ children }) => {
       <Row gutter={8}>
         {/* 24칸 중에 6칸 차지함 - 모바일일 때는 세로로 3칸/데스크탑일 때는 가로로 3칸 */}
         <Col xs={24} md={6}>
-          {/* isLoggedIn이 true = <UserProfile> / setIsLoggedIn false = <LoginForm> */}
-          {isLoggedIn ? <UserProfile /> : <LoginForm />}
+          {/* me가 true = <UserProfile> / setIsLoggedIn false = <LoginForm> */}
+          {me ? <UserProfile /> : <LoginForm />}
         </Col>
         <Col xs={24} md={12}>
           {children}

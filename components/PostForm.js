@@ -1,25 +1,26 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { Form, Input, Button } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { addPost } from '../reducers/post';
+import useInput from '../hooks/useInput';
 
 const PostForm = () => {
-  const { imagePaths } = useSelector((state) => state.post);
+  const { imagePaths, addPostDone } = useSelector((state) => state.post);
 
-  const imageInput = useRef();
+  const [text, onChangeText, setText] = useInput('');
 
-  const [text, setText] = useState('');
-  const onChangeText = useCallback((e) => {
-    setText(e.target.value);
-  }, []);
+  useEffect(() => {
+    if (addPostDone) {
+      setText('');
+    }
+  }, [addPostDone])
 
   const dispatch = useDispatch();
   const onSubmit = useCallback(() => {
-    dispatch(addPost);
-    //짹짹을 눌렀을 때 Input.TextArea 내용 비우기
-    setText('');
-  }, []);
+    dispatch(addPost(text));
+  }, [text]);
 
+  const imageInput = useRef();
   //파일 업로드 창 띄우기
   const onClickImageUpload = useCallback(() => {
     imageInput.current.click();

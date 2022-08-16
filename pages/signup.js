@@ -4,6 +4,8 @@ import { Form, Input, Checkbox, Button } from "antd";
 import { useCallback, useState } from "react";
 import useInput from "../hooks/useInput";
 import styled from "styled-components";
+import { SIGN_UP_REQUEST } from "../reducers/user";
+import { useSelector, useDispatch } from "react-redux";
 
 const ErrorMessage = styled.div`
   color: red;
@@ -11,10 +13,14 @@ const ErrorMessage = styled.div`
 
 const Signup = () => {
 
+  const dispatch = useDispatch();
+
+  const { signUpLoading } = useSelector((state) => state.user);
+
   //form 입력시 nickname, password, password-check 모두 동일한 포맷이기 때문에 커스텀훅으로 만들어서 관리하면 편함
-  const [id, setId] = useState('');
-  const onChangeId = useCallback((e) => {
-    setId(e.target.value);
+  const [email, setEmail] = useState('');
+  const onChangeEmail = useCallback((e) => {
+    setEmail(e.target.value);
   }, []);
 
   //커스텀훅 버전
@@ -47,8 +53,12 @@ const Signup = () => {
     if (!term) {
       return setTermError(true);
     }
-    console.log(id, nickname, password);
-  }, [password, passwordCheck, term]);
+    console.log(email, nickname, password);
+    dispatch({
+      type: SIGN_UP_REQUEST,
+      data: { email, password, nickname }
+    })
+  }, [email, password, passwordCheck, term]);
 
   return (
     <>
@@ -59,9 +69,9 @@ const Signup = () => {
         <Form onFinish={onSubmit}>
           <div>
             {/* htmlFor에 input의 아이디나 네임을 적어 연결함(label과 input을 연결함) */}
-            <label htmlFor="user-id">아이디</label>
+            <label htmlFor="user-email">이메일</label>
             <br />
-            <Input name="user-id" value={id} required onChange={onChangeId}></Input>
+            <Input name="user-email" type="email" value={email} required onChange={onChangeEmail}></Input>
           </div>
           <div>
             <label htmlFor="user-nick">닉네임</label>
@@ -84,7 +94,7 @@ const Signup = () => {
             {termError && <ErrorMessage>약관에 동의하셔야 합니다.</ErrorMessage>}
           </div>
           <div style={{ marginTop: 10 }}>
-            <Button type="primary" htmlType="submit">가입하기</Button>
+            <Button type="primary" htmlType="submit" loading={signUpLoading}>가입하기</Button>
           </div>
         </Form>
       </AppLayout>

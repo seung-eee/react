@@ -8,6 +8,9 @@ export const initialState = {
   signUpLoading: false, //회원가입 시도중
   signUpDon: false,
   signUpError: false,
+  changeNicknameLoading: false, //닉네임 변경 시도중
+  changeNicknameDon: false,
+  changeNicknameError: false,
   me: null,
   signUpDate: {},
   loginData: {},
@@ -32,6 +35,19 @@ export const FOLLOW_FAILURE = 'FOLLOW_FAILURE';
 export const UNFOLLOW_REQUEST = 'UNFOLLOW_REQUEST';
 export const UNFOLLOW_SUCCESS = 'UNFOLLOW_SUCCESS';
 export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE';
+
+export const CHANGE_NICKNAME_REQUEST = 'CHANGE_NICKNAME_REQUEST';
+export const CHANGE_NICKNAME_SUCCESS = 'CHANGE_NICKNAME_SUCCESS';
+export const CHANGE_NICKNAME_FAILURE = 'CHANGE_NICKNAME_FAILURE';
+
+const dummyUser = (data) => ({
+  ...data,
+  nickname: '황승짱',
+  id: 1,
+  Post: [],
+  Followings: [],
+  Followers: [],
+})
 
 // thunk 사용 시
 export const loginAction = (data) => {
@@ -61,6 +77,18 @@ export const loginRequestAction = (data) => {
 export const logoutRequestAction = (data) => {
   return {
     type: LOG_OUT_REQUEST,
+  }
+}
+
+export const signupRequestAction = (data) => {
+  return {
+    type: SIGN_UP_REQUEST,
+  }
+}
+
+export const changeNicknameRequestAction = (data) => {
+  return {
+    type: CHANGE_NICKNAME_REQUEST,
   }
 }
 
@@ -107,6 +135,44 @@ const reducer = (state = initialState, action) => {
         ...state,
         logOutLoading: false,
         logOutError: action.error,
+      }
+    case SIGN_UP_REQUEST:
+      return {
+        ...state,
+        signUpLoading: true,
+        signUpDone: false,
+        signUpError: null,
+      }
+    case SIGN_UP_SUCCESS:
+      return {
+        ...state,
+        signUpLoading: false,
+        signUpDone: true,
+      }
+    case SIGN_UP_FAILURE:
+      return {
+        ...state,
+        signUpLoading: false,
+        signUpError: action.error,
+      }
+    case CHANGE_NICKNAME_REQUEST:
+      return {
+        ...state,
+        changeNicknameLoading: true,
+        changeNicknameDone: false,
+        changeNicknameError: null,
+      }
+    case CHANGE_NICKNAME_SUCCESS:
+      return {
+        ...state,
+        changeNicknameLoading: false,
+        changeNicknameDone: true,
+      }
+    case CHANGE_NICKNAME_FAILURE:
+      return {
+        ...state,
+        changeNicknameLoading: false,
+        changeNicknameError: action.error,
       }
   }
 };

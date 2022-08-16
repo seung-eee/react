@@ -1,9 +1,10 @@
-//_app.js는 index.js의 부모라고 할 수 있음
-
+import React from 'react';
 import 'antd/dist/antd.css';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import Wrapper from '../store/configureStore';
+
+//_app.js는 index.js의 부모라고 할 수 있음
 
 const App = ({ Component }) => {
   return (

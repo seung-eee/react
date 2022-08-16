@@ -29,28 +29,28 @@ const LoginForm = ({ setIsLoggedIn }) => {
   // }, []);
 
   // 커스텀훅 버전(password) -> useInput에서 useState와 useCallback을 해주기 때문에 password와 onChangePassword만 넣어주면 됨
-  const [id, onChangeId] = useInput('');
+  const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
 
   const dispatch = useDispatch();
 
-  const { isLoggingIn } = useSelector((state) => state.user)
+  const { logInLoading } = useSelector((state) => state.user)
 
   const sytle = useMemo(() => ({ marginTop: 10 }), []);
 
   //antd의 onFinish에는 e.preventDefault();가 이미 적용되어 있어서 쓰지 않아도 됨
   const onSubmitForm = useCallback(() => {
-    console.log(id, password);
+    console.log(email, password);
     //로그인을 하는 순간 IsLoggedIn이 true로 바뀜 => AppLayout.js에 있는 <LoginForm>이 <UserProfile>로 바뀜
-    dispatch(loginRequestAction({ id, password }));
-  }, [id, password])
+    dispatch(loginRequestAction({ email, password }));
+  }, [email, password])
 
   return (
     <FormWrapper onFinish={onSubmitForm}>
       <div>
-        <label htmlFor='user-id'>아이디</label>
+        <label htmlFor='user-email'>이메일</label>
         <br />
-        <Input name="user-id" value={id} onChange={onChangeId} required></Input>
+        <Input name="user-email" value={email} type="email" onChange={onChangeEmail} required></Input>
       </div>
       <div>
         <label htmlFor='user-password'>비밀번호</label>
@@ -58,7 +58,7 @@ const LoginForm = ({ setIsLoggedIn }) => {
         <Input name="user-password" type="password" value={password} onChange={onChangePassword} required></Input>
       </div>
       <div style={sytle}>
-        <Button type='primary' htmlType='submit' loading={isLoggingIn}>로그인</Button>
+        <Button type='primary' htmlType='submit' loading={logInLoading}>로그인</Button>
         <Link href="/signup"><a><Button>회원가입</Button></a></Link>
       </div>
     </FormWrapper>
